@@ -31,13 +31,14 @@ prefix=/usr/local
 srcdir= .
 
 # files that need mode 755
-EXEC_FILES=sirius
+EXEC_FILES=etcd
 
 # files that need mode 644
-SCRIPT_FILES+=sirius-version
-SCRIPT_FILES+=sirius-build
-SCRIPT_FILES+=sirius-deploy
-SCRIPT_FILES+=sirius-bootstrap
+SCRIPT_FILES+=etcd-version
+SCRIPT_FILES+=etcd-add
+SCRIPT_FILES+=etcd-copy
+SCRIPT_FILES+=etcd-update
+SCRIPT_FILES+=etcd-delete
 SCRIPT_FILES+=sirius-common
 SCRIPT_FILES+=sirius-shFlags
 
@@ -47,12 +48,12 @@ all:
 	@echo "       make uninstall"
 
 install:
-	@test -f sirius-shFlags || (echo "Run 'sirius submodule init && sirius submodule update' first." ; exit 1 )
+	@test -f etcd-shFlags || (echo "Run 'etcd submodule init && etcd submodule update' first." ; exit 1 )
 	cp -r $(srcdir)/shFlags $(prefix)/bin/shFlags
 	install -d -m 0755 $(prefix)/bin
 	install -m 0755 $(EXEC_FILES) $(prefix)/bin
 	install -m 0644 $(SCRIPT_FILES) $(prefix)/bin
-	sed -i "s%{sirius_version}%`cat VERSION`%g" $(prefix)/bin/sirius-version
+	sed -i "s%{etcd_shell_version}%`cat VERSION`%g" $(prefix)/bin/etcd-version
 
 uninstall:
 	test -d $(prefix)/bin && \

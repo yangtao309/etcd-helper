@@ -1,2 +1,23 @@
-#! /bin/sh
+#!/bin/sh
 
+init() {
+    echo "This is etcd update shell, welcome!"
+    export CURRENT_DIR=$PWD
+}
+
+usage() {
+    echo "usage: etcd update <options>"
+    echo "功能说明:"
+    echo "  修改目录或者文件"
+    echo "参数说明:"
+
+}
+
+cmd_help() {
+    usage
+    exit 0
+}
+
+cmd_default() {
+    echo "function cmd_default."
+}

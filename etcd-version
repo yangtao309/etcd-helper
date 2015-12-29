@@ -1,20 +1,22 @@
 #!/bin/sh
 
-version={sirius_version}
+version={etcd_shell_version}
 
 init() {
-    echo "This is sirius version shell, welcome!"
+    echo "This is etcd shell version, welcome!"
 }
 
 usage() {
-	echo "usage: sirius version"
-}
-
-cmd_default() {
-	echo $version
+	echo "usage: etcd version"
+	echo "功能说明:"
+    echo "  显示etcd脚本程序版本"
 }
 
 cmd_help() {
 	usage
 	exit 0
+}
+
+cmd_default() {
+	echo $version
 }

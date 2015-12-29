@@ -2,23 +2,16 @@
 
 
 init() {
-    echo "This is sirius build shell, welcome!"
+    echo "This is etcd copy shell, welcome!"
     export CURRENT_DIR=$PWD
 }
 
 usage() {
-    echo "usage: sirius build <options>"
+    echo "usage: etcd copy <options>"
     echo "功能说明:"
-    echo "  构建微服务，包含下载源代码，编译，打包，生成镜像，发布镜像"
-    echo "  需要预装git、maven、docker等工具."
+    echo "  复制目录或者文件"
     echo "参数说明:"
-    echo "  -e  可选参数: environment。指定环境，例如：play|dev|qa|stage|prod。默认值：dev"
-    echo "  -s  可选参数: sandbox。指定沙箱，默认值：base"
-    echo "  -r  必选参数: repository url。指定程序项目仓库"
-    echo "  -b  可选参数: branch。指定程序分支，默认值：develop"
-    echo "  -T  可选参数: maven test。设置构建时是否跳过测试。默认值：true"
-    echo "  -D  可选参数: maven deploy。设置是否deploy到nexus仓库。默认值：false"
-    echo "  -d  可选参数: work dir。当前工作目录"
+
 }
 
 cmd_help() {
@@ -26,208 +19,6 @@ cmd_help() {
     exit 0
 }
 
-#删除工作目录
-function remove_work_dir() {
-    if [ "$2" = "" ]; then
-        echo 删除工作目录: $1
-        cd ../ && rm -rf $1
-    fi
-}
-
 cmd_default() {
-    DEFINE_string   environment 'dev'       'environment'           e
-    DEFINE_string   sandbox     'base'      'sandbox'               s
-    DEFINE_string   repository  ''          'service repository'    r
-    DEFINE_string   branch      'develop'   'branch'                b
-    DEFINE_string   test        'true'      'maven test'            T
-    DEFINE_string   deploy      'false'     'maven deploy'          D
-    DEFINE_string   directory   ''          'work directory'        d
-
-    FLAGS "$@" || exit $?
-    eval set -- "${FLAGS_ARGV}"
-
-    if [ "${FLAGS_repository}" = "" ]; then
-        usage
-        die "错误信息: -r 是必选参数."
-    fi
-
-    echo 开始构建...
-
-    environment=${FLAGS_environment}
-    sandbox=${FLAGS_sandbox}
-    service_repository=${FLAGS_repository}
-    branch=${FLAGS_branch}
-    maven_test=${FLAGS_test}
-    maven_deploy=${FLAGS_deploy}
-    
-
-    echo 检查构建参数：
-    echo environment: $environment
-    echo sandbox: $sandbox
-    echo service_repository: $service_repository
-    echo branch: $branch
-    echo maven_test: $maven_test
-    echo maven_deploy: $maven_deploy
-
-    buildDir="${FLAGS_directory}"
-    currentTime=`date +'%Y%m%d%H%M%S'`
-    if [ "${FLAGS_directory}" = "" ]; then
-        buildDir=/tmp/sirius-build-$currentTime
-        echo 创建工作目录：$buildDir
-        mkdir -p $buildDir
-    fi
-    echo buildDir: $buildDir
-    cd $buildDir
-    
-    # 下载配置程序代码
-    echo 下载配置...
-    git clone -b develop $SIRIUS_PROPS sirius-props
-    if [ "$?" != "0" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "下载服务配置失败."
-    fi
-
-    # 加载全局配置文件
-    echo 加载全局配置文件: $buildDir/sirius-props/properties.sh
-    source $buildDir/sirius-props/properties.sh
-
-    # 加载环境配置文件
-    echo 加载环境配置文件: $buildDir/sirius-props/$environment/properties.sh
-    source $buildDir/sirius-props/$environment/properties.sh
-
-
-    #从repository_url中取出project_key
-    repository_url_array=(${service_repository//\// })
-    if [[ $service_repository =~ ^ssh:// ]]; then
-        project_key=${repository_url_array[2]}
-        service_dir=${repository_url_array[3]}
-    else
-        project_key=${repository_url_array[3]}
-        service_dir=${repository_url_array[4]}
-    fi
-    
-    echo project_key: $project_key
-
-    #下载应用程序
-    echo 下载服务代码...
-    git clone -b $branch $service_repository $service_dir
-
-    if [ "$?" != "0" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "下载服务源代码失败。"
-    fi
-
-    cd $buildDir/$service_dir
-
-
-    if [ ! -e "SERVICE" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "在项目根目录中读取SERVICE文件，但是没有找到。"
-    fi
-
-    service_name=`cat SERVICE | sed 's/ //g' | grep 'SERVICE_NAME=' | sed 's/SERVICE_NAME=//'`
-    if [ "${service_name}" = "" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "SERVICE文件中没有定义service_name"
-    fi
-    echo service_name: $service_name
-
-    api_version=`cat SERVICE | sed 's/ //g' | grep 'API_VERSION=' | sed 's/API_VERSION=//'`
-    if [ "${api_version}" = "" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "SERVICE文件中没有定义api_version"
-    fi
-    echo api_version: $api_version
-
-    #检查pom.xml文件是否存在
-    if [ ! -e "pom.xml" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "在项目根目录中读取pom.xml文件，但是没有找到。"
-    fi
-
-    #执行maven编译
-    if [ $maven_deploy = 'true' ]; then
-        if [ $maven_test = 'true' ]; then
-            echo "mvn deploy -U -Dmigration.skip=true"
-            mvn deploy -U -Dmigration.skip=true
-        else
-            echo "mvn deploy -U -Dmaven.test.skip=true -Dmigration.skip=true"
-            mvn deploy -U -Dmaven.test.skip=true -Dmigration.skip=true
-        fi
-    else
-        if [ $maven_test = 'true' ]; then
-            echo "mvn clean install -U -Dmigration.skip=true"
-            mvn clean install -U -Dmigration.skip=true
-        else
-            echo "mvn clean install -U -Dmaven.test.skip=true -Dmigration.skip=true"
-            mvn clean install -U -Dmaven.test.skip=true -Dmigration.skip=true
-        fi
-    fi
-    if [ "$?" != "0" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "构建源代码失败。"
-    fi
-
-    #从pom.xml中读取程序版本，版本号需要按照规范定义版本后缀
-    app_version=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -E '^[0-9]+\.[0-9]+.*$' | sed -e "s/-SNAPSHOT//g" | sed -e "s/.RELEASE//g" `
-    if [ "${app_version}" = "" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "从pom.xml中解析app_version失败"
-    fi
-    echo 解析程序版本...
-    echo app_version: $app_version
-
-        #检查Dockerfile文件是否存在
-    if [ ! -e "Dockerfile" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "在项目根目录中读取Dockerfile文件，但是没有找到。"
-    fi
-
-    #镜像tag规范约定
-    image_tag="${api_version}-${app_version}"
-    if [[ $branch =~ ^develop ]]; then
-        image_tag="${image_tag}-d$currentTime"
-    elif [[ $branch =~ ^master ]]; then
-        image_tag="${image_tag}-m$currentTime"
-    elif [[ $branch =~ ^feature ]]; then
-        image_tag="${image_tag}-f$currentTime"
-    elif [[ $branch =~ ^release ]]; then
-        image_tag="${image_tag}-r$currentTime"
-    elif [[ $branch =~ ^hotfix ]]; then
-        image_tag="${image_tag}-h$currentTime"
-    fi
-
-    image_uri="$docker_registry_url/$project_key/$service_name:$image_tag"
-
-    # 编译docker镜像
-    echo 创建镜像: docker build -t $image_uri .
-    docker build -t $image_uri .
-    if [ "$?" != "0" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "构建镜像失败。"
-    fi
-
-    #将Docker Image写入临时文件
-    echo $image_uri > $buildDir/DOCKER_IMAGE
-
-    #执行docker image push
-    echo 上传镜像: docker push $image_uri
-    docker push $image_uri
-    if [ "$?" != "0" ]; then
-        remove_work_dir "${buildDir}" "${FLAGS_directory}"
-        die "上传镜像失败。"
-    fi
-
-    remove_work_dir "${buildDir}" "${FLAGS_directory}"
-
-    echo 构建成功：
-    echo 镜像：$image_uri
-
-    # 输出下一条命令
-    echo
-    echo 使用下面的命令将镜像发布到Marathon:
-    echo sirius deploy -I "$image_uri" -e "$environment" -s "$sandbox" -r "$service_repository" -b "$branch"
-
+    echo "function cmd_default."
 }
-
-

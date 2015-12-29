@@ -1,79 +1,23 @@
 #!/bin/sh
 
 init() {
-    echo "This is sirius bootstrap shell, welcome!"
+    echo "This is etcd delete shell, welcome!"
     export CURRENT_DIR=$PWD
 }
 
 usage() {
-    echo "usage: sirius bootstrap <options>"
+    echo "usage: etcd delete <options>"
     echo "功能说明:"
-    echo "  构建并发布微服务，包含下载源代码，编译，打包，生成镜像，发布镜像，发布到Marathon"
+    echo "  删除目录或者文件"
     echo "参数说明:"
-    echo "  -e  可选参数: environment。指定环境，例如：play|dev|qa|stage|prod。默认值：dev"
-    echo "  -s  可选参数: sandbox。指定沙箱，默认值：base"
-    echo "  -r  必选参数: repository url。指定程序项目仓库"
-    echo "  -b  可选参数: branch。指定程序分支，默认值：develop"
-    echo "  -T  可选参数: maven test。设置构建时是否跳过测试。默认值：true"
-    echo "  -D  可选参数: maven deploy。设置是否deploy到nexus仓库。默认值：false"
-    echo "  -c  可选参数: cpu。用于设定cpu数量，单位：核心数. 不设置则从配置文件中读取"
-    echo "  -m  可选参数: memory。用于设定mem大小，单位：MB. 不设置则从配置文件中读取"
-    echo "  -i  可选参数: instance。用于设定instance个数，单位：个. 不设置则从配置文件中读取"
-}
-
-cmd_default() {
-    #cmd_help "$@"
-    DEFINE_string   environment 'dev'       'environment'              e
-    DEFINE_string   sandbox     'base'      'sandbox'                  s
-    DEFINE_string   repository  ''          'service repository'       r
-    DEFINE_string   branch      'develop'   'branch'                   b
-    DEFINE_string   cpu         '0.5'       'cpu core nums 0.1~8'      c
-    DEFINE_string   mem         '1024'      'memory size(MB)'          m
-    DEFINE_string   instance    '1'         'instances'                i
-    DEFINE_string   test        'true'      'maven test'               T
-    DEFINE_string   deploy      'false'     'maven deploy'             D
-
-    FLAGS "$@" || exit $?
-    eval set -- "${FLAGS_ARGV}"
-
-    if [ "${FLAGS_repository}" = "" ]; then
-        usage
-        die "-r 是必选参数."
-    fi
-
-    # 新建目录
-    currentTime=`date +'%Y%m%d%H%M%S'`
-    echo 开始时间: $currentTime
-
-    buildDir=/tmp/sirius-build-$currentTime
-    echo 创建工作目录：$buildDir
-    mkdir -p $buildDir && cd $buildDir
-
-    # 先sirius build 镜像
-    echo sirius build -e "${FLAGS_environment}" -s "${FLAGS_sandbox}" -r "${FLAGS_repository}" -b "${FLAGS_branch}" -T "${FLAGS_test}" -D "${FLAGS_deploy}" -d "${buildDir}"
-    sirius build -e "${FLAGS_environment}" -s "${FLAGS_sandbox}" -r "${FLAGS_repository}" -b "${FLAGS_branch}" -T "${FLAGS_test}" -D "${FLAGS_deploy}" -d "${buildDir}"
-    
-    if [ "$?" != "0" ]; then
-        echo 删除工作目录: $buildDir
-        cd ../ && rm -rf $buildDir
-        die "构建服务失败."
-    fi
-
-    DOCKER_IMAGE=`cat $buildDir/DOCKER_IMAGE`
-
-    # 执行sirius deploy
-    echo sirius deploy -I "$DOCKER_IMAGE" -e "${FLAGS_environment}" -s "${FLAGS_sandbox}" -r "${FLAGS_repository}" -b "${FLAGS_branch}"  -c "${FLAGS_cpu}" -m "${FLAGS_mem}" -i "${FLAGS_instance}" -d "${buildDir}"
-    sirius deploy -I "$DOCKER_IMAGE" -e "${FLAGS_environment}" -s "${FLAGS_sandbox}" -r "${FLAGS_repository}" -b "${FLAGS_branch}" -c "${FLAGS_cpu}" -m "${FLAGS_mem}" -i "${FLAGS_instance}" -d "${buildDir}"
-
-    echo 删除工作目录: $buildDir
-    cd ../ && rm -rf $buildDir
-
-    echo 结束时间: `date +'%Y%m%d%H%M%S'`
 
 }
-
 
 cmd_help() {
     usage
     exit 0
+}
+
+cmd_default() {
+    echo "function cmd_default."
 }
