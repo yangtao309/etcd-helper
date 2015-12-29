@@ -1,0 +1,8 @@
+ #!/bin/bash
+ source /etc/profile &> /dev/null
+
+ distdir=$(which etcd|awk -F'etcd' '{print $1}')
+
+ #echo $distdir
+
+ . $distdir/shFlags/src/shflags

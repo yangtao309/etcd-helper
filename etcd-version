@@ -1,0 +1,20 @@
+#!/bin/sh
+
+version={sirius_version}
+
+init() {
+    echo "This is sirius version shell, welcome!"
+}
+
+usage() {
+	echo "usage: sirius version"
+}
+
+cmd_default() {
+	echo $version
+}
+
+cmd_help() {
+	usage
+	exit 0
+}
