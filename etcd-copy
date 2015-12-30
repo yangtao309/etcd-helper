@@ -81,13 +81,13 @@ cmd_default() {
     eval set -- "${FLAGS_ARGV}"
 
     echo 验证输入参数 -o ...
-    if [ "${FLAGS_origin}" = "" ]; then
+    if [ "${FLAGS_origin_url}" = "" ]; then
         usage
         die "错误信息: -o 是必选参数."
     fi
 
     echo 验证输入参数 -d ...
-    if [ "${FLAGS_dest}" = "" ]; then
+    if [ "${FLAGS_dest_url}" = "" ]; then
         usage
         die "错误信息: -d 是必选参数."
     fi
