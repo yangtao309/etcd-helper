@@ -27,6 +27,7 @@ recursion_copy() {
         dest_url=$2
 
         echo 递归复制数据开始 ...
+        echo 源目录或者文件的url: $origin_url
         key=`curl "$origin_url" | jq '.node.key'`
         echo 目录或者文件的相对路径: $key
 
@@ -65,7 +66,7 @@ etcd_key_copy() {
         dest_url=$2
 
         echo 找到原始值 ...
-        origin_value=`curl $origin_url | jq '.[]' | jq '.value' | sed -e "s/\"//g"`
+        origin_value=`curl $origin_url | jq '.node.value' | sed -e "s/\"//g"`
 
         echo 将原始值设置到目标对象
         curl "$dest_url" -XPUT -d value="$origin_value"
@@ -93,6 +94,6 @@ cmd_default() {
     fi
 
     echo 开始处理 ...
-    recursion_copy "$origin_url" "$dest_url"
+    recursion_copy "${FLAGS_origin_url}" "${FLAGS_dest_url}"
     	
 }
