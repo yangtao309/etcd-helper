@@ -47,9 +47,10 @@ recursion_copy() {
             else
                 for j in ${origin_keys[@]}
                 do
-                    echo 路径$origin_url下的子目录或者文件$j ...
+                    echo 路径: $origin_url 下的子目录或者文件: $j ...
                     additionalKey=`echo $j | sed -e "s%$key%%g"`
                     echo 附加的关键字为: $additionalKey
+                    echo "recursion_copy $origin_root_url$j $dest_url$additionalKey"
                     recursion_copy "$origin_root_url$j" "$dest_url$additionalKey"
                 done
             fi
