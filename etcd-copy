@@ -23,17 +23,17 @@ cmd_help() {
 recursion_copy() {
     echo 参数个数: $#
     if [ $# = 2 ]; then
-        origin_url=$1
-        dest_url=$2
+        local origin_url=$1
+        local dest_url=$2
 
         echo 递归复制数据开始 ...
         echo 源目录或者文件的url: $origin_url
-        key=`curl "$origin_url" | jq '.node.key' | sed -e "s/\"//g"`
+        local key=`curl "$origin_url" | jq '.node.key' | sed -e "s/\"//g"`
         echo 目录或者文件的相对路径: $key
 
-        origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
+        local origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
         echo 源目录或者文件的根路径: $origin_root_url
-        is_directory=`curl $origin_url | jq '.node.dir'`
+        local is_directory=`curl $origin_url | jq '.node.dir'`
         echo 检测到的该路径是否是目录: $is_directory
 
         if [ "$is_directory" = "true" ]; then
@@ -41,14 +41,14 @@ recursion_copy() {
             curl "$dest_url" -XPUT -d "dir=true"
 
             echo 分组所有etcd key值
-            origin_keys=(`curl "$origin_url" | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
+            local origin_keys=(`curl "$origin_url" | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
             if [ -z $origin_keys ]; then
                 echo "origin_keys ports is not found!"
             else
                 for j in ${origin_keys[@]}
                 do
                     echo 路径: $origin_url 下的子目录或者文件: $j ...
-                    additionalKey=`echo $j | sed -e "s%$key%%g"`
+                    local additionalKey=`echo $j | sed -e "s%$key%%g"`
                     echo 附加的关键字为: $additionalKey
                     echo "recursion_copy $origin_root_url$j $dest_url$additionalKey"
                     recursion_copy "$origin_root_url$j" "$dest_url$additionalKey"
