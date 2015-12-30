@@ -155,3 +155,7 @@ usage: etcd copy <options>
 ```bash
 # etcd copy -o http://127.0.0.1:2379/v2/keys/dev/base/sirius -d http://127.0.0.1:2379/v2/keys/qa/base/sirius
 ```
+
+#### Reference
+
+* [etcd api](https://github.com/coreos/etcd/blob/master/Documentation/api.md)
