@@ -1,6 +1,21 @@
 
 ### etcd shell 
 
+#### Install
+
+##### Install jq to parse json
+
+[Download Load](https://stedolan.github.io/jq/)
+
+##### Install etcd shell
+
+```bash
+# git clone https://github.com/yangtao309/etcd-helper.git
+# make install
+# etcd 
+# etcd viersion
+```
+
 *	etcd help
 *	etcd version help
 *	etcd add help
