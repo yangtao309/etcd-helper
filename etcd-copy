@@ -11,7 +11,9 @@ usage() {
     echo "功能说明:"
     echo "  复制目录或者文件"
     echo "参数说明:"
-
+    echo "  -m  必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . "
+    echo "	-o	必选参数: origin url, 指定其源目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
+ 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
 }
 
 cmd_help() {
@@ -20,5 +22,48 @@ cmd_help() {
 }
 
 cmd_default() {
-    echo "function cmd_default."
+    echo 函数cmd_default执行开始 ...
+    DEFINE_string   mode    'key'   'mode'          m
+    DEFINE_string	origin_url	''		'origin url'	o
+  	DEFINE_string	dest_url	''		'dest url'		d
+
+    FLAGS "$@" || exit $?
+    eval set -- "${FLAGS_ARGV}"
+
+    echo 验证输入参数 -o ...
+    if [ "${FLAGS_origin}" = "" ]; then
+        usage
+        die "错误信息: -o 是必选参数."
+    fi
+
+    echo 验证输入参数 -d ...
+    if [ "${FLAGS_dest}" = "" ]; then
+        usage
+        die "错误信息: -d 是必选参数."
+    fi
+
+    echo 开始处理 ...
+    if [ "${FLAGS_mode}" = "key"]; then
+   		echo 找到原始值 ...
+    	origin_value=`curl ${FLAGS_origin_url} | jq '.[]' | jq '.value' | sed -e "s/\"//g"`
+
+    	echo 将原始值设置到目标对象
+    	curl ${FLAGS_dest_url} -XPUT -d value="$origin_value"
+    else
+    	echo 找到原始值 ...
+    	origin_keys=(`curl ${FLAGS_origin_url} | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
+    	if [ -z $origin_keys ]; then
+        	echo "origin_keys ports is not found!"
+		else
+			for j in ${origin_keys[@]}
+        	do
+            	echo $j
+        	done
+		fi
+
+
+    	echo 将原始值设置到目标对象
+    	curl ${FLAGS_dest} -XPUT -d value="$origin_value"
+
+    fi
 }
