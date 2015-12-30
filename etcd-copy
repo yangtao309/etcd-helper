@@ -11,9 +11,8 @@ usage() {
     echo "功能说明:"
     echo "  复制目录或者文件"
     echo "参数说明:"
-    echo "  -m  必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . "
     echo "	-o	必选参数: origin url, 指定其源目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
- 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
+ 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://172.18.2.165:2379/v2/keys/qa/yangtao ."
 }
 
 cmd_help() {
@@ -21,9 +20,60 @@ cmd_help() {
     exit 0
 }
 
+recursion_copy() {
+    echo 参数个数: $#
+    if [ $# = 2 ]; then
+        origin_url=$1
+        dest_url=$2
+
+        echo 递归复制数据开始 ...
+        key=`curl $origin_url | jq .node.key`
+        echo 目录或者文件的相对路径: $key
+
+        origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
+        echo 源目录或者文件的根路径: $origin_root_url
+        is_directory=`curl $origin_url | jq .node.dir`
+        echo 检测到的该路径是否是目录: $is_directory
+
+        if [ $is_directory = "true" ]; then
+            echo 创建目录
+            curl $dest_url -XPUT -d dir=true
+
+            echo 分组所有etcd key值
+            origin_keys=(`curl $origin_url | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
+            if [ -z $origin_keys ]; then
+                echo "origin_keys ports is not found!"
+            else
+                for j in ${origin_keys[@]}
+                do
+                    echo 路径$origin_url下的子目录或者文件$j ...
+                    additionalKey=`echo $j | sed -e "s%$key%%g"`
+                    recursion_copy "$origin_root_url/$j" "$dest_url/$additionalKey"
+                done
+            fi
+
+        else
+            etcd_key_copy "$origin_url" "$dest_url"
+        fi
+    fi
+}
+
+etcd_key_copy() {
+    echo 参数个数: $#
+    if [ $# = 2 ]; then
+        origin_url=$1
+        dest_url=$2
+
+        echo 找到原始值 ...
+        origin_value=`curl $origin_url | jq '.[]' | jq '.value' | sed -e "s/\"//g"`
+
+        echo 将原始值设置到目标对象
+        curl $dest_url -XPUT -d value="$origin_value"
+    fi
+}
+
 cmd_default() {
     echo 函数cmd_default执行开始 ...
-    DEFINE_string   mode    'key'   'mode'          m
     DEFINE_string	origin_url	''		'origin url'	o
   	DEFINE_string	dest_url	''		'dest url'		d
 
@@ -43,27 +93,6 @@ cmd_default() {
     fi
 
     echo 开始处理 ...
-    if [ "${FLAGS_mode}" = "key"]; then
-   		echo 找到原始值 ...
-    	origin_value=`curl ${FLAGS_origin_url} | jq '.[]' | jq '.value' | sed -e "s/\"//g"`
-
-    	echo 将原始值设置到目标对象
-    	curl ${FLAGS_dest_url} -XPUT -d value="$origin_value"
-    else
-    	echo 找到原始值 ...
-    	origin_keys=(`curl ${FLAGS_origin_url} | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
-    	if [ -z $origin_keys ]; then
-        	echo "origin_keys ports is not found!"
-		else
-			for j in ${origin_keys[@]}
-        	do
-            	echo $j
-        	done
-		fi
-
-
-    	echo 将原始值设置到目标对象
-    	curl ${FLAGS_dest} -XPUT -d value="$origin_value"
-
-    fi
+    recursion_copy "$origin_url" "$dest_url"
+    	
 }
