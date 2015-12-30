@@ -81,7 +81,7 @@ usage: etcd update <options>
 ###### 修改一个key的value值
 
 ```bash
-etcd update -u http://172.18.2.164:2379/v2/keys/qa/base/sirius/test.etcd.add -m key -v "updated value"
+etcd update -u http://172.0.0.1:2379/v2/keys/qa/base/sirius/test.etcd.add -m key -v "updated value"
 ```
 
 ###### 修改一个目录名称
