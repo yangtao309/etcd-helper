@@ -50,8 +50,40 @@ usage: etcd add <options>
 	-v	可选参数: value, 指定其值. 若mode=key时必须指定其值，mode=directory时可选 .
 ```
 
-举个例子:
+##### 举个例子:
+
+###### 增加一个新的key
 
 ```bash
 etcd add -u http://172.0.0.1:2379/v2/keys/qa/base/sirius/test.etcd.add -m key -v "hello world" 
 ```
+
+###### 增加一个新的目录
+```bash
+etcd add -u http://172.0.0.1:2379/v2/keys/qa/base/sirius/test -m directory
+```
+
+#### etcd update
+
+```bash
+# etcd update help
+usage: etcd update <options>
+功能说明:
+  修改目录或者文件
+参数说明:
+  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
+  -m  必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . 
+  -v  可选参数: value, 指定其值. 若mode=key时必须指定其值，mode=directory时可选 .
+```
+
+##### 举个例子:
+
+###### 修改一个key的value值
+
+```bash
+etcd update -u http://172.18.2.164:2379/v2/keys/qa/base/sirius/test.etcd.add -m key -v "updated value"
+```
+
+###### 修改一个目录名称
+
+暂时还不支持，敬请期待下一个版本
