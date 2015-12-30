@@ -130,5 +130,11 @@ usage: etcd copy <options>
 ###### copy一个key
 
 ```bash
+# etcd copy -o http://127.0.0.1:2379/v2/keys/dev/base/sirius/database.username -d http://127.0.0.1:2379/v2/keys/qa/base/sirius/database.username
+```
 
+###### 递归copy一个目录
+
+```bash
+# etcd copy -o http://127.0.0.1:2379/v2/keys/dev/base/sirius -d http://127.0.0.1:2379/v2/keys/qa/base/sirius
 ```
