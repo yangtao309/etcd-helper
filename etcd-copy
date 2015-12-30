@@ -28,7 +28,7 @@ recursion_copy() {
 
         echo 递归复制数据开始 ...
         echo 源目录或者文件的url: $origin_url
-        key=`curl "$origin_url" | jq '.node.key'`
+        key=`curl "$origin_url" | jq '.node.key' | sed -e "s/\"//g"`
         echo 目录或者文件的相对路径: $key
 
         origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
@@ -49,10 +49,10 @@ recursion_copy() {
                 do
                     echo 路径$origin_url下的子目录或者文件$j ...
                     additionalKey=`echo $j | sed -e "s%$key%%g"`
-                    recursion_copy "$origin_root_url/$j" "$dest_url/$additionalKey"
+                    echo 附加的关键字为: $additionalKey
+                    recursion_copy "$origin_root_url$j" "$dest_url$additionalKey"
                 done
             fi
-
         else
             etcd_key_copy "$origin_url" "$dest_url"
         fi
