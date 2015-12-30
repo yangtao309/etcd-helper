@@ -40,7 +40,7 @@ This is etcd shell version, welcome!
 #### etcd add 
 
 ```bash
-etcd add help
+# etcd add help
 usage: etcd add <options>
 功能说明:
   增加目录或者文件
@@ -104,13 +104,13 @@ usage: etcd delete <options>
 ###### 删除一个key
 
 ```bash
-# etcd delete -u http://172.18.2.164:2379/v2/keys/qa/base/sirius/test.etcd.add
+# etcd delete -u http://127.0.0.1:2379/v2/keys/qa/base/sirius/test.etcd.add
 ```
 
 ###### 删除一个目录
 
 ```bash
-# etcd delete -u http://172.18.2.164:2379/v2/keys/qa/base/sirius/test?dir=true
+# etcd delete -u http://127.0.0.1:2379/v2/keys/qa/base/sirius/test?dir=true
 ```
 
 #### etcd copy
@@ -121,8 +121,8 @@ usage: etcd copy <options>
 功能说明:
   复制目录或者文件
 参数说明:
-  -o  必选参数: origin url, 指定其源目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
-  -d  必选参数: dest url, 指定其目标目录或者文件的url 例如: http://172.18.2.165:2379/v2/keys/qa/yangtao .
+  -o  必选参数: origin url, 指定其源目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao .
+  -d  必选参数: dest url, 指定其目标目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/qa/yangtao .
 ```
 
 ##### 举个例子:
