@@ -39,8 +39,8 @@ SCRIPT_FILES+=etcd-add
 SCRIPT_FILES+=etcd-copy
 SCRIPT_FILES+=etcd-update
 SCRIPT_FILES+=etcd-delete
-SCRIPT_FILES+=sirius-common
-SCRIPT_FILES+=sirius-shFlags
+SCRIPT_FILES+=etcd-common
+SCRIPT_FILES+=etcd-shFlags
 
 
 all:

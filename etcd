@@ -35,7 +35,7 @@ main() {
     . "$ETCD_DIR/etcd-common"
 
     # This environmental variable fixes non-POSIX getopt style argument
-    # parsing, effectively breaking siruis subcommand parsing on several
+    # parsing, effectively breaking etcd subcommand parsing on several
     # Linux platforms.
     export POSIXLY_CORRECT=1
 
