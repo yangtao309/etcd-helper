@@ -36,7 +36,7 @@ cmd_default() {
     fi
 
     echo 开始处理 ...
-    if [ "${FLAGS_mode}" = "key"]; then
+    if [ "${FLAGS_mode}" = "key" ]; then
     	echo 验证参数 -v ...
     	if [ "${FLAGS_value}" = "" ]; then
         	usage
