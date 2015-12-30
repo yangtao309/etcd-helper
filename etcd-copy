@@ -33,12 +33,12 @@ recursion_copy() {
 
         origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
         echo 源目录或者文件的根路径: $origin_root_url
-        is_directory=`curl $origin_url | jq .node.dir`
+        is_directory=`curl $origin_url | jq '.node.dir'`
         echo 检测到的该路径是否是目录: $is_directory
 
-        if [ $is_directory = "true" ]; then
+        if [ "$is_directory" = "true" ]; then
             echo 创建目录
-            curl "$dest_url" -XPUT -d dir=true
+            curl "$dest_url" -XPUT -d "dir=true"
 
             echo 分组所有etcd key值
             origin_keys=(`curl "$origin_url" | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
