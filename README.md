@@ -5,7 +5,7 @@
 
 ##### Install jq to parse json
 
-[Download Load](https://stedolan.github.io/jq/)
+[jq website](https://stedolan.github.io/jq/)
 
 ##### Install etcd shell
 
