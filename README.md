@@ -45,7 +45,7 @@ usage: etcd add <options>
 功能说明:
   增加目录或者文件
 参数说明:
-	-u	必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
+	-u	必选参数: url, 指定其请求url包含全路径. 例如: http://172.0.0.1:2379/v2/keys/dev/yangtao .
 	-m	必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . 
 	-v	可选参数: value, 指定其值. 若mode=key时必须指定其值，mode=directory时可选 .
 ```
@@ -71,7 +71,7 @@ usage: etcd update <options>
 功能说明:
   修改目录或者文件
 参数说明:
-  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
+  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://172.0.0.1:2379/v2/keys/dev/yangtao .
   -m  必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . 
   -v  可选参数: value, 指定其值. 若mode=key时必须指定其值，mode=directory时可选 .
 ```
