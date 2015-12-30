@@ -1,5 +1,6 @@
 
 ### etcd shell 
+[![Build Status](https://travis-ci.org/nikfoundas/etcd-viewer.png?branch=master)](https://travis-ci.org/nikfoundas/etcd-viewer)
 
 #### Install
 
