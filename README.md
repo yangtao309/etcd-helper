@@ -125,10 +125,16 @@ usage: etcd delete <options>
 # etcd delete -u http://127.0.0.1:2379/v2/keys/qa/base/sirius/test.etcd.add
 ```
 
-###### 删除一个目录
+###### 删除一个空目录
 
 ```bash
 # etcd delete -u http://127.0.0.1:2379/v2/keys/qa/base/sirius/test?dir=true
+```
+
+###### 递归删除目录含其子孙目录
+
+```bash
+# etcd delete -u http://127.0.0.1:2379/v2/keys/qa/quxiaojing?recursive=true
 ```
 
 #### etcd copy
