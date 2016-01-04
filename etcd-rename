@@ -1,0 +1,62 @@
+#!/bin/sh
+
+init() {
+    echo "This is etcd rename shell, welcome!"
+    export CURRENT_DIR=$PWD
+}
+
+usage() {
+    echo "usage: etcd rename <options>"
+    echo "功能说明:"
+    echo "  删除目录或者文件"
+    echo "参数说明:"
+    echo "	-u	必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
+    echo "	-r	可选参数: rename url, 指定其修改的url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/test ."
+	echo "	-m	可选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . "
+
+}
+
+cmd_help() {
+    usage
+    exit 0
+}
+
+cmd_default() {
+    echo 函数cmd_default执行开始 ...
+	DEFINE_string	url			''		'url'		u
+    DEFINE_string	mode		'key'	'mode'		m
+    DEFINE_string	rename_url	''		'url'		r
+
+
+	FLAGS "$@" || exit $?
+    eval set -- "${FLAGS_ARGV}"
+
+    echo 验证输入参数 -u ...
+    if [ "${FLAGS_url}" = "" ]; then
+        usage
+        die "错误信息: -u 是必选参数."
+    fi
+
+   	echo 验证输入参数 -r ...
+    if [ "${FLAGS_url}" = "" ]; then
+        usage
+        die "错误信息: -u 是必选参数."
+    fi
+
+    echo 重命名 ...
+ 	if [ "${FLAGS_mode}" = "key" ]; then
+ 		echo 执行copy key命令 ...
+    	ectd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
+
+    	echo Deleting the origin url ...
+	    curl ${FLAGS_url} -XDELETE
+
+    else
+    	echo 执行copy目录命令 ...
+    	ectd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
+
+    	echo Deleting Directories ...
+    	curl ${FLAGS_url}?recursive=true -XDELETE
+    fi
+
+}
