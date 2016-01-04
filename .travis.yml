@@ -1,1 +1,1 @@
-script: bash ./deploy.sh
+script: sudo bash ./deploy.sh
