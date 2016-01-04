@@ -45,7 +45,7 @@ cmd_default() {
     	fi
 
     	echo Changing the value of a key ...
-    	curl ${FLAGS_url} -XPUT -d value="${FLAGS_value}"
+    	curl ${FLAGS_url} -XPUT --data-urlencode "value=${FLAGS_value}"
     else
     	echo Not support to changing directories ...
     fi

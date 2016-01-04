@@ -70,7 +70,7 @@ etcd_key_copy() {
         origin_value=`curl $origin_url | jq '.node.value' | sed -e "s/\"//g"`
 
         echo 将原始值设置到目标对象
-        curl "$dest_url" -XPUT -d value="$origin_value"
+        curl "$dest_url" -XPUT --data-urlencode "value=$origin_value"
     fi
 }
 

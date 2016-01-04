@@ -44,7 +44,7 @@ cmd_default() {
     	fi
 
     	echo Setting the value of key ...
-    	curl ${FLAGS_url} -XPUT -d value="${FLAGS_value}"
+    	curl ${FLAGS_url} -XPUT --data-urlencode "value=${FLAGS_value}"
     else
     	echo Creating Directories ...
     	curl ${FLAGS_url} -XPUT -d dir=true
