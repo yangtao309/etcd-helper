@@ -11,8 +11,8 @@ usage() {
     echo "功能说明:"
     echo "  复制目录或者文件"
     echo "参数说明:"
-    echo "	-o	必选参数: origin url, 指定其源目录或者文件的url 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao ."
- 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://172.18.2.165:2379/v2/keys/qa/yangtao ."
+    echo "	-o	必选参数: origin url, 指定其源目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao ."
+ 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/qa/yangtao ."
 }
 
 cmd_help() {
