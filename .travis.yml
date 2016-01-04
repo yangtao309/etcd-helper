@@ -1,2 +1,3 @@
-sudo: required 
-language: /bin/bash
+language: php
+php:
+  - 5.4
