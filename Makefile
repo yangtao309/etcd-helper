@@ -39,6 +39,7 @@ SCRIPT_FILES+=etcd-add
 SCRIPT_FILES+=etcd-copy
 SCRIPT_FILES+=etcd-update
 SCRIPT_FILES+=etcd-delete
+SCRIPT_FILES+=etcd-rename
 SCRIPT_FILES+=etcd-common
 SCRIPT_FILES+=etcd-shFlags
 
