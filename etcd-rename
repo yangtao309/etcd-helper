@@ -40,20 +40,20 @@ cmd_default() {
    	echo 验证输入参数 -r ...
     if [ "${FLAGS_rename_url}" = "" ]; then
         usage
-        die "错误信息: -u 是必选参数."
+        die "错误信息: -r 是必选参数."
     fi
 
     echo 重命名 ...
  	if [ "${FLAGS_mode}" = "key" ]; then
  		echo 执行copy key命令 ...
-    	ectd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
+    	etcd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
 
     	echo Deleting the origin url ...
 	    curl ${FLAGS_url} -XDELETE
 
     else
     	echo 执行copy目录命令 ...
-    	ectd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
+    	etcd copy -o ${FLAGS_url} -d ${FLAGS_rename_url} 
 
     	echo Deleting Directories ...
     	curl ${FLAGS_url}?recursive=true -XDELETE
