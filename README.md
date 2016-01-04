@@ -25,6 +25,7 @@
 *	etcd update help
 *	etcd delete help
 *	etcd copy help
+* etcd rename help
 
 #### etcd
 
@@ -37,6 +38,7 @@ Available subcommands are:
   add      新增目录和文件
   update   修改目录和文件
   delete   删除目录和文件
+  rename   重命名目录和文件
   version  打印etcd脚本版本号
 
 Try 'etcd <subcommand> help' for details.
@@ -161,6 +163,31 @@ usage: etcd copy <options>
 
 ```bash
 # etcd copy -o http://127.0.0.1:2379/v2/keys/dev/base/sirius -d http://127.0.0.1:2379/v2/keys/qa/base/sirius
+```
+
+#### etcd rename
+
+```bash
+# etcd rename help
+usage: etcd rename <options>
+功能说明:
+  删除目录或者文件
+参数说明:
+  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
+  -r  可选参数: rename url, 指定其修改的url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/test .
+  -m  可选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . 
+```
+
+##### 重命名一个key
+
+```bash
+# etcd rename -u http://127.0.0.1:2379/v2/keys/dev/yangtao/sirius/database.password -r http://127.0.0.1:2379/v2/keys/dev/yangtao/sirius/database.pwd
+```
+
+##### 重命名一个目录
+
+```bash
+# etcd rename -u http://127.0.0.1:2379/v2/keys/dev/yangtao/sirius -r http://127.0.0.1:2379/v2/keys/dev/yangtao/sirius2 -m dir
 ```
 
 #### Reference
