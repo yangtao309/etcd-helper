@@ -38,7 +38,7 @@ cmd_default() {
     fi
 
    	echo 验证输入参数 -r ...
-    if [ "${FLAGS_url}" = "" ]; then
+    if [ "${FLAGS_rename_url}" = "" ]; then
         usage
         die "错误信息: -u 是必选参数."
     fi
