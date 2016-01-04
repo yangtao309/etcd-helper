@@ -20,6 +20,7 @@ usage() {
     echo "  add      新增目录和文件"
     echo "  update   修改目录和文件"
     echo "  delete   删除目录和文件"
+    echo "  rename   重命名目录和文件"
     echo "  version  打印etcd脚本版本号"
     echo
     echo "Try 'etcd <subcommand> help' for details."
