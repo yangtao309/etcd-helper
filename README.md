@@ -173,8 +173,8 @@ usage: etcd rename <options>
 功能说明:
   删除目录或者文件
 参数说明:
-  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/yangtao .
-  -r  可选参数: rename url, 指定其修改的url包含全路径. 例如: http://172.18.2.164:2379/v2/keys/dev/test .
+  -u  必选参数: url, 指定其请求url包含全路径. 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao .
+  -r  可选参数: rename url, 指定其修改的url包含全路径. 例如: http://127.0.0.1:2379/v2/keys/dev/test .
   -m  可选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . 
 ```
 
