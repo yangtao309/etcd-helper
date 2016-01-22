@@ -14,7 +14,7 @@
 # git clone https://github.com/yangtao309/etcd-helper.git
 # make install
 # etcd 
-# etcd viersion
+# etcd version
 ```
 
 #### Content 
