@@ -13,7 +13,6 @@ usage() {
     echo "	-u	必选参数: url, 指定其请求url包含全路径. 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao ."
     echo "	-m	必选参数: mode, 指定其模式. 值类型: dir | key. 默认值key . "
     echo "	-v	可选参数: value, 指定其值. 若mode=key时必须指定其值，mode=directory时可选 ."
-
 }
 
 cmd_help() {
@@ -23,7 +22,7 @@ cmd_help() {
 
 cmd_default() {
     echo 函数cmd_default执行开始 ...
-	DEFINE_string	url		''		'url'		u
+    DEFINE_string	url		''		'url'		u
     DEFINE_string	mode	'key'	'mode'		m
     DEFINE_string	value	''		'value'		v
 

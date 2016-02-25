@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 init() {
     echo "This is etcd copy shell, welcome!"
     export CURRENT_DIR=$PWD
@@ -77,7 +76,7 @@ etcd_key_copy() {
 cmd_default() {
     echo 函数cmd_default执行开始 ...
     DEFINE_string	origin_url	''		'origin url'	o
-  	DEFINE_string	dest_url	''		'dest url'		d
+    DEFINE_string	dest_url	''		'dest url'		d
 
     FLAGS "$@" || exit $?
     eval set -- "${FLAGS_ARGV}"
@@ -95,6 +94,5 @@ cmd_default() {
     fi
 
     echo 开始处理 ...
-    recursion_copy "${FLAGS_origin_url}" "${FLAGS_dest_url}"
-    	
+    recursion_copy "${FLAGS_origin_url}" "${FLAGS_dest_url}"	
 }

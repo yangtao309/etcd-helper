@@ -20,9 +20,9 @@ cmd_help() {
 
 cmd_default() {
     echo 函数cmd_default执行开始 ...
-	DEFINE_string	url		''		'url'		u
+    DEFINE_string	url		''		'url'		u
 
-	FLAGS "$@" || exit $?
+    FLAGS "$@" || exit $?
     eval set -- "${FLAGS_ARGV}"
 
     echo 验证输入参数 -u ...
@@ -32,5 +32,4 @@ cmd_default() {
     fi
 
     curl ${FLAGS_url} -XDELETE
-
 }

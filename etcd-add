@@ -50,4 +50,3 @@ cmd_default() {
     	curl ${FLAGS_url} -XPUT -d dir=true
     fi
 }
-
