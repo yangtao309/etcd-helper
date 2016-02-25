@@ -75,8 +75,8 @@ etcd_key_copy() {
 
 cmd_default() {
     echo 函数cmd_default执行开始 ...
-    DEFINE_string	origin_url	''		'origin url'	o
-    DEFINE_string	dest_url	''		'dest url'		d
+    DEFINE_string  origin_url  ''  'origin url'  o
+    DEFINE_string  dest_url  ''  'dest url'  d
 
     FLAGS "$@" || exit $?
     eval set -- "${FLAGS_ARGV}"

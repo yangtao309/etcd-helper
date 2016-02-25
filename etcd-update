@@ -38,10 +38,10 @@ cmd_default() {
     echo 开始处理...
     if [ "${FLAGS_mode}" = "key" ]; then
     	echo 验证参数 -v ...
-    	if [ "${FLAGS_value}" = "" ]; then
-        	usage
-        	die "错误信息: -k值为key时 -v是必选参数."
-    	fi
+        if [ "${FLAGS_value}" = "" ]; then
+            usage
+            die "错误信息: -k值为key时 -v是必选参数."
+        fi
 
     	echo Changing the value of a key ...
     	curl ${FLAGS_url} -XPUT --data-urlencode "value=${FLAGS_value}"
