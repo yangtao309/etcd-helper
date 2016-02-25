@@ -11,7 +11,6 @@ usage() {
     echo "  删除目录或者文件"
     echo "参数说明:"
     echo "	-u	必选参数: url, 指定其请求url包含全路径. 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao ."
-
 }
 
 cmd_help() {

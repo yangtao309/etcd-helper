@@ -12,7 +12,7 @@ usage() {
     echo "  复制目录或者文件"
     echo "参数说明:"
     echo "	-o	必选参数: origin url, 指定其源目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/dev/yangtao ."
- 	echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/qa/yangtao ."
+    echo "	-d	必选参数: dest url, 指定其目标目录或者文件的url 例如: http://127.0.0.1:2379/v2/keys/qa/yangtao ."
 }
 
 cmd_help() {
@@ -21,26 +21,26 @@ cmd_help() {
 }
 
 recursion_copy() {
-    echo 参数个数: $#
+    echo 参数个数: $# ...
     if [ $# = 2 ]; then
         local origin_url=$1
         local dest_url=$2
 
         echo 递归复制数据开始 ...
-        echo 源目录或者文件的url: $origin_url
+        echo 源目录或者文件的url: $origin_url ...
         local key=`curl "$origin_url" | jq '.node.key' | sed -e "s/\"//g"`
-        echo 目录或者文件的相对路径: $key
+        echo 目录或者文件的相对路径: $key ...
 
         local origin_root_url=`echo $origin_url | sed -e "s%$key%%g"`
-        echo 源目录或者文件的根路径: $origin_root_url
+        echo 源目录或者文件的根路径: $origin_root_url ...
         local is_directory=`curl $origin_url | jq '.node.dir'`
-        echo 检测到的该路径是否是目录: $is_directory
+        echo 检测到的该路径是否是目录: $is_directory ...
 
         if [ "$is_directory" = "true" ]; then
-            echo 创建目录
+            echo 创建目录 ...
             curl "$dest_url" -XPUT -d "dir=true"
 
-            echo 分组所有etcd key值
+            echo 分组所有etcd key值 ...
             local origin_keys=(`curl "$origin_url" | jq '.node.nodes[] | .key' | sed -e "s/\"//g"`)
             if [ -z $origin_keys ]; then
                 echo "origin_keys ports is not found!"
@@ -49,7 +49,7 @@ recursion_copy() {
                 do
                     echo 路径: $origin_url 下的子目录或者文件: $j ...
                     local additionalKey=`echo $j | sed -e "s%$key%%g"`
-                    echo 附加的关键字为: $additionalKey
+                    echo 附加的关键字为: $additionalKey ...
                     echo "recursion_copy $origin_root_url$j $dest_url$additionalKey"
                     recursion_copy "$origin_root_url$j" "$dest_url$additionalKey"
                 done
@@ -69,7 +69,7 @@ etcd_key_copy() {
         echo 找到原始值 ...
         origin_value=`curl $origin_url | jq '.node.value' | sed -e "s/\"//g"`
 
-        echo 将原始值设置到目标对象
+        echo 将原始值设置到目标对象 ...
         curl "$dest_url" -XPUT --data-urlencode "value=$origin_value"
     fi
 }
